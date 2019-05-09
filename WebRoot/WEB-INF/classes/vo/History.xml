@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "http://www.ibatis.com/dtd/sql-map-2.dtd" "sql-map-2.dtd" >
+<sqlMap namespace="wt">
+	<typeAlias alias="history" type="vo.History"/>
+	
+	<select id="findHistoryByEid" parameterClass="int" resultClass="history">
+		select * from history where eid=#value#
+	</select>
+	
+	<insert id="addHistory" parameterClass="history">
+		insert into history values(null,#startdate#,#enddate#,#place#,#job#,#eid#);
+	</insert>
+	
+	<delete id="delHistory" parameterClass="int">
+		delete from history where eid=#value#
+	</delete>
+</sqlMap>

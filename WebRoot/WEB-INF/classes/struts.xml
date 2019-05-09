@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts SYSTEM "struts-2.1.dtd" >
+<struts>
+
+	<package name="root" extends="struts-default">
+		<action name="emp" class="actions.EmpAction">
+			<result name="toall" type="redirectAction">emp!allEmp</result>
+			<result name="allemp">allemp.jsp</result>
+			<result name="addemp">addemp.jsp</result>
+		</action>
+	</package>
+	
+</struts>

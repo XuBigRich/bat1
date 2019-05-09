@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "http://www.ibatis.com/dtd/sql-map-2.dtd" "sql-map-2.dtd" >
+<sqlMap namespace="yjl">
+	<typeAlias alias="dept" type="vo.Dept"/>
+	
+	<select id="findDeptById" parameterClass="int" resultClass="dept">
+		select * from dept where did=#value#
+	</select>
+	<select id="allDept" resultClass="dept">
+		select * from dept
+	</select>
+	
+</sqlMap>

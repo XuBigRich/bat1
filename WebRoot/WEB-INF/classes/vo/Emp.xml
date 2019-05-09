@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "http://www.ibatis.com/dtd/sql-map-2.dtd" "sql-map-2.dtd" >
+<sqlMap namespace="yz">
+
+	<typeAlias alias="emp" type="vo.Emp"/>
+	
+	<resultMap class="emp" id="empdeptmap">
+		<result property="eid" column="eid"/>
+		<result property="ename" column="ename"/>
+		<result property="sex" column="sex"/>
+		<result property="hire" column="hire"/>
+		<result property="sar" column="sar"/>
+		<result property="did" column="did"/>
+		<result property="dept" column="did" select="yjl.findDeptById"/>
+		<result property="hist" column="eid" select="wt.findHistoryByEid"/>
+	</resultMap>
+	<select id="allEmps" resultMap="empdeptmap">
+		select * from emp
+	</select>
+	<select id="allEmps2" resultMap="empdeptmap" parameterClass="emp">
+		select * from emp
+		<dynamic prepend="where">
+			<isNotNull property="ename" prepend="and">
+				ename like '%$ename$%'
+			</isNotNull>
+			<isNotEqual property="sex" compareValue="k" prepend="and">
+				sex=#sex#
+			</isNotEqual>
+			<isNotEmpty property="hire" prepend="and">
+				hire>=#hire#
+			</isNotEmpty>
+			<isNotEmpty property="hire2" prepend="and">
+				hire&lt;=#hire2#
+			</isNotEmpty>
+			<isNotEqual property="did" compareValue="0" prepend="and">
+				did=#did#
+			</isNotEqual>
+		</dynamic>
+	</select>
+	
+	<insert id="addEmp" parameterClass="emp">
+		insert into emp values(null,#ename#,#sex#,#hire#,#sar#,#did#)
+		<selectKey keyProperty="eid" resultClass="int">
+			select last_insert_id();
+		</selectKey>
+	</insert>
+	
+	<!-- SQLServer写法。url地址必须加入：selectMethod=Cursor
+	<insert id="addEmp" parameterClass="emp">
+		insert into emp values(#ename#,#sex#,#hire#,#sar#,#did#)
+		<selectKey keyProperty="eid" resultClass="int">
+			select @@IDENTITY
+		</selectKey>
+	</insert>
+	 -->
+	 
+	 <!--Oracle写法。insert into vvv values(seq.nextval...);
+	<insert id="addEmp" parameterClass="emp">
+		<selectKey keyProperty="eid" resultClass="int">
+			select seq.nextval from dual
+		</selectKey>
+		insert into emp values(#eid#,#ename#,#sex#,#hire#,#sar#,#did#)
+	</insert>
+	 -->
+	
+	<update id="updateEmp" parameterClass="emp">
+		update emp set ename=#ename#,sex=#sex#,hire=#hire#,sar=#sar#,did=#did# where eid=#eid#
+	</update>
+	
+	<select id="findEmpById" parameterClass="emp" resultClass="emp">
+		select * from emp where eid=#eid#
+	</select>
+	<select id="findEmpById2" parameterClass="int" resultClass="emp">
+		select * from emp where eid=#value#
+	</select>
+	
+	<delete id="delEmp" parameterClass="emp">
+		delete from emp where eid=#eid#
+	</delete>
+	<delete id="allDelEmp" parameterClass="java.lang.String">
+		delete from emp where eid in($ids:String$)
+	</delete>
+	
+</sqlMap>
